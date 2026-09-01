@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="32dp"
-        android:text="No Answers Logged\nPlease make use of Dumbass Calculator Mk 2"
+        android:text="No Answers Logged\nPlease make use of Dumbass Calculator Mk II"
         android:textColor="@color/dark_brown"
         android:textSize="16sp"
         android:fontFamily="@font/milky_vintage"

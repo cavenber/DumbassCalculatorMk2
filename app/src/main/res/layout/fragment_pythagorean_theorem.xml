@@ -48,8 +48,10 @@
 
         <EditText
             android:id="@+id/pt_a"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:hint="@string/answer_hint"
+            android:textColorHint="@color/pale_brown"
             android:inputType="none"
             android:maxLines="1"
             android:textColor="@color/brown"
@@ -67,8 +69,10 @@
 
         <EditText
             android:id="@+id/pt_b"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:hint="@string/answer_hint"
+            android:textColorHint="@color/pale_brown"
             android:inputType="none"
             android:maxLines="1"
             android:textColor="@color/brown"
@@ -76,6 +80,13 @@
             android:fontFamily="@font/milky_vintage"
             android:backgroundTint="@color/dark_brown" />
 
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+        
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,15 +97,17 @@
 
         <EditText
             android:id="@+id/pt_c"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:hint="@string/answer_hint"
+            android:textColorHint="@color/pale_brown"
             android:inputType="none"
             android:maxLines="1"
             android:textColor="@color/brown"
             android:textSize="28sp"
             android:fontFamily="@font/milky_vintage"
             android:backgroundTint="@color/dark_brown" />
-
+        
     </LinearLayout>
 
     <include

@@ -57,8 +57,10 @@
 
         <EditText
             android:id="@+id/cf_a"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:hint="@string/input_hint"
+            android:textColorHint="@color/pale_brown"
             android:inputType="none"
             android:maxLines="1"
             android:textColor="@color/brown"
@@ -76,8 +78,10 @@
 
         <EditText
             android:id="@+id/cf_b"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:hint="@string/input_hint"
+            android:textColorHint="@color/pale_brown"
             android:inputType="none"
             android:maxLines="1"
             android:textColor="@color/brown"
@@ -102,8 +106,10 @@
 
         <EditText
             android:id="@+id/cf_C"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:hint="@string/answer_hint"
+            android:textColorHint="@color/pale_brown"
             android:inputType="none"
             android:maxLines="1"
             android:textColor="@color/brown"
@@ -121,8 +127,10 @@
 
         <EditText
             android:id="@+id/cf_c"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:hint="@string/answer_hint"
+            android:textColorHint="@color/pale_brown"
             android:inputType="none"
             android:maxLines="1"
             android:textColor="@color/brown"

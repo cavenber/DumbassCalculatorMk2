@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import kotlin.math.pow
@@ -16,7 +15,7 @@ class QuadraticEquation : Fragment() {
     lateinit var etC: EditText
     lateinit var etX: EditText
 
-    private var selected: EditText? = null // universal selection variable
+    lateinit var inputBase: InputBase
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,9 +37,50 @@ class QuadraticEquation : Fragment() {
         etB.showSoftInputOnFocus = false
         etC.showSoftInputOnFocus = false
 
+        inputBase = InputBase(view, requireContext(),
+            {
+                etA.setText("")
+                etB.setText("")
+                etC.setText("")
+                etX.setText("")
+            },
+            {
+                val a: Double = Num.evalToNum(etA.text.toString())
+                val b: Double = Num.evalToNum(etB.text.toString())
+                val c: Double = Num.evalToNum(etC.text.toString())
+
+                val discriminant = b.pow(2) - (4 * a * c)
+
+                if (discriminant < 0) {
+                    etX.setText("No Real Roots")
+                } else if (discriminant == 0.0) {
+                    val x = ((-b + (b.pow(2) - 4 * (a * c)).pow(0.5)) / (2 * a))
+
+                    etX.setText(Num.toString(x))
+
+                } else if (discriminant > 0) {
+                    val x1 = (-b + (b.pow(2) - 4 * a * c).pow(0.5)) / (2 * a)
+                    val x2 = (-b - (b.pow(2) - 4 * a * c).pow(0.5)) / (2 * a)
+
+                    etX.setText(String.format("%s, %s", Num.toString(x1), Num.toString(x2)))
+                } else {
+                    throw RuntimeException("to go to catch block")
+                }
+            },
+            {
+                DBHelper(requireContext()).saveAnswer(
+                    "Quadratic Equation",
+                    String.format("a = %s | b = %s | c = %s", etA.text.toString(), etB.text.toString(), etC.text.toString()),
+                    "x",
+                    etX.text.toString()
+                )
+            }
+        )
+        inputBase.etEmpty = etX
+
         val listener = View.OnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
-                selected = v as EditText
+                inputBase.selected = v as EditText
             }
         }
 
@@ -48,145 +88,5 @@ class QuadraticEquation : Fragment() {
         etB.onFocusChangeListener = listener
         etC.onFocusChangeListener = listener
 
-        inputBase(etX)
     }
-
-    fun inputBase(output: EditText) {
-
-        view?.findViewById<Button>(R.id.btn0)
-            ?.setOnClickListener { selected?.append("0") }
-
-        view?.findViewById<Button>(R.id.btn1)
-            ?.setOnClickListener { selected?.append("1") }
-
-        view?.findViewById<Button>(R.id.btn2)
-            ?.setOnClickListener { selected?.append("2") }
-
-        view?.findViewById<Button>(R.id.btn3)
-            ?.setOnClickListener { selected?.append("3") }
-
-        view?.findViewById<Button>(R.id.btn4)
-            ?.setOnClickListener { selected?.append("4") }
-
-        view?.findViewById<Button>(R.id.btn5)
-            ?.setOnClickListener { selected?.append("5") }
-
-        view?.findViewById<Button>(R.id.btn6)
-            ?.setOnClickListener { selected?.append("6") }
-
-        view?.findViewById<Button>(R.id.btn7)
-            ?.setOnClickListener { selected?.append("7") }
-
-        view?.findViewById<Button>(R.id.btn8)
-            ?.setOnClickListener { selected?.append("8") }
-
-        view?.findViewById<Button>(R.id.btn9)
-            ?.setOnClickListener { selected?.append("9") }
-
-        view?.findViewById<Button>(R.id.btnDecimalPoint)
-            ?.setOnClickListener { selected?.append(".") }
-
-        view?.findViewById<Button>(R.id.btnPlus)
-            ?.setOnClickListener { selected?.append("+") }
-
-        view?.findViewById<Button>(R.id.btnSubtract)
-            ?.setOnClickListener { selected?.append("-") }
-
-        view?.findViewById<Button>(R.id.btnMultiply)
-            ?.setOnClickListener { selected?.append("*") }
-
-        view?.findViewById<Button>(R.id.btnDivide)
-            ?.setOnClickListener { selected?.append("/") }
-
-        view?.findViewById<Button>(R.id.btnStartBracket)
-            ?.setOnClickListener { selected?.append("(") }
-
-        view?.findViewById<Button>(R.id.btnEndBracket)
-            ?.setOnClickListener { selected?.append(")") }
-
-        view?.findViewById<Button>(R.id.btnFactorial)
-            ?.setOnClickListener { selected?.append("!") }
-
-        view?.findViewById<Button>(R.id.btnExponent)
-            ?.setOnClickListener { selected?.append("^") }
-
-        view?.findViewById<Button>(R.id.btnRemainder)
-            ?.setOnClickListener { selected?.append("%") }
-
-        view?.findViewById<Button>(R.id.btnComma)
-            ?.setOnClickListener { selected?.append(",") }
-
-        view?.findViewById<Button>(R.id.btnExecute)
-            ?.setOnClickListener {
-                if (calculate()){
-                    answerLog()
-                }
-            }
-
-        view?.findViewById<Button>(R.id.btnBackspace)
-            ?.setOnLongClickListener {
-                // input fields
-                etA.setText("")
-                etB.setText("")
-                etC.setText("")
-                output.setText("")
-                true
-            }
-
-        view?.findViewById<Button>(R.id.btnBackspace)
-            ?.setOnClickListener {
-                selected?.let {
-                    val length = it.text.length
-                    if (length > 0) {
-                        it.text.delete(length - 1, length)
-                    }
-                }
-                output.setText("")
-            }
-
-        view?.findViewById<Button>(R.id.btnAnswer)
-            ?.setOnClickListener { selected?.append(DBHelper(requireContext()).getMostRecentAnswer()) }
-    }
-
-    fun calculate() : Boolean {
-        try { // write calculations here
-            val a: Double = Num.evalToNum(etA.text.toString())
-            val b: Double = Num.evalToNum(etB.text.toString())
-            val c: Double = Num.evalToNum(etC.text.toString())
-
-            val discriminant = b.pow(2) - (4 * a * c)
-
-            if (discriminant < 0) {
-                etX.setText("No Real Roots")
-            } else if (discriminant == 0.0) {
-                val x = ((-b + (b.pow(2) - 4 * (a * c)).pow(0.5)) / (2 * a))
-
-                etX.setText(Num.toString(x))
-
-            } else if (discriminant > 0) {
-                val x1 = (-b + (b.pow(2) - 4 * a * c).pow(0.5)) / (2 * a)
-                val x2 = (-b - (b.pow(2) - 4 * a * c).pow(0.5)) / (2 * a)
-
-                etX.setText(String.format("%s or %s", Num.toString(x1), Num.toString(x2)))
-            } else {
-                throw RuntimeException("to go to catch block")
-            }
-
-            return true
-        } catch (e: RuntimeException) {
-            etX.setText(R.string.displeased_message)
-            return false
-        }
-    }
-
-    fun answerLog() {
-        DBHelper(requireContext()).saveAnswer(
-            "Quadratic Equation",
-            String.format("a = %s | b = %s | c = %s", etA.text.toString(), etB.text.toString(), etC.text.toString()),
-            "x",
-            etX.text.toString()
-        )
-    }
-
-
 }
